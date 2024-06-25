@@ -3,4 +3,12 @@ name = "practice-data-processing"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "frontend"
+path = "src/frontend/main.rs"
+
+[[bin]]
+name = "backend"
+path = "src/backend/main.rs"
+
 [dependencies]
