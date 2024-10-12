@@ -12,9 +12,7 @@ use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 #[tokio::main]
 async fn main() {
     println!("Hello, world from backend.");
-    // dotenvy::dotenv().ok();
-    dotenvy::from_filename("/Users/jameshawley/MyCodingProjects/RustPractice/practice-data-processing/.env").ok();
-    // dotenvy::dotenv().expect("Failed to load .env file.");
+    dotenvy::dotenv().expect("Failed to load .env file.");
 
     let server_port = std::env::var("SERVER_PORT").expect("SERVER_PORT is not set in .env file.");
     let server_address = std::env::var("SERVER_ADDRESS").expect("SERVER_ADDRESS is not set in .env file.");
