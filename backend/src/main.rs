@@ -1,5 +1,6 @@
 mod quadratic_formula;
 mod math;
+mod user;
 use math::add::add;
 use math::multiply::multiply;
 use quadratic_formula::quadratic_formula::QuadraticFormula;
@@ -44,7 +45,7 @@ async fn main() {
 }
 
 async fn hello_world() -> String {
-    "Hello world_00000".to_owned()
+    "Hello world_backend".to_owned()
 }
 
 pub fn create_router(db_pool: Pool<Postgres>) -> Router {

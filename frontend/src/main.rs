@@ -17,7 +17,7 @@ fn app() -> Html {
 fn main() {
     // println!("Hello, world from frontend.");
     // println!("{}", subtract(2, 3));
-    // http://127.0.0.1:8080
+    // http://127.0.0.1:8082
     yew::Renderer::<App>::new().render();
 }
 pub fn subtract(a: i32, b: i32) -> i32 {

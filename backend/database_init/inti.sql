@@ -1,8 +1,6 @@
 CREATE TABLE IF NOT EXISTS users (
   email       VARCHAR(255) PRIMARY KEY,
-  password    VARCHAR(64) NOT NULL,
-  deleted_at  TIMESTAMPTZ DEFAULT NULL,
-  token       TEXT DEFAULT NULL
+  password    VARCHAR(64) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS quadratic_formula (
