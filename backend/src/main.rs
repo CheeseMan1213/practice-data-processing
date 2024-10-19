@@ -1,6 +1,11 @@
 mod quadratic_formula;
 mod math;
 mod user;
+use user::user_repository::get_all_users;
+use user::user_repository::get_user_by_email;
+use user::user_repository::create_user;
+use user::user_repository::update_user;
+use user::user_repository::delete_user;
 use math::add::add;
 use math::multiply::multiply;
 use quadratic_formula::quadratic_formula::QuadraticFormula;
@@ -51,11 +56,10 @@ async fn hello_world() -> String {
 pub fn create_router(db_pool: Pool<Postgres>) -> Router {
     Router::new()
         .route("/", get(hello_world))
-        // .route("createQuadraticFormula", get(create_quadratic_formula))
-        // .route("getOneQuadraticFormula", get(get_one_quadratic_formula))
+        .route("/users", get(get_all_users).post(create_user))
+        .route("/users/:email", get(get_user_by_email).put(update_user).delete(delete_user))
         .with_state(db_pool)
 }
-
 
 #[cfg(test)]
 mod test;
