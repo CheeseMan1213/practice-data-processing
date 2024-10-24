@@ -18,3 +18,5 @@ serde_json = "1.0.128"
 
 #env
 dotenvy = "0.15.7"
+
+tower-http = {version = "0.6.1", features = ["cors"]}

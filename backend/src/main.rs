@@ -1,9 +1,11 @@
 mod quadratic_formula;
 mod math;
 mod user;
+use axum::http::Method;
 use user::user_repository::get_all_users;
 use user::user_repository::get_user_by_email;
 use user::user_repository::create_user;
+use user::user_repository::hello;
 use user::user_repository::update_user;
 use user::user_repository::delete_user;
 use math::add::add;
@@ -12,6 +14,7 @@ use quadratic_formula::quadratic_formula::QuadraticFormula;
 use axum::{routing::get, Router};
 use tokio::net::TcpListener;
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
+use tower_http::cors::{CorsLayer, Any};
 
 // pub static PORT: &'static str = "3002";
 
@@ -54,10 +57,19 @@ async fn hello_world() -> String {
 }
 
 pub fn create_router(db_pool: Pool<Postgres>) -> Router {
+
+    // Create a CORS layer
+    let cors = CorsLayer::new()
+    .allow_origin(Any) // Allow any origin
+    .allow_methods([Method::GET, Method::POST, Method::PUT, Method::DELETE]) // Allow specific methods
+    .allow_headers(Any); // Allow any headers
+
     Router::new()
         .route("/", get(hello_world))
+        .route("/hello", get(hello))
         .route("/users", get(get_all_users).post(create_user))
         .route("/users/:email", get(get_user_by_email).put(update_user).delete(delete_user))
+        .layer(cors)
         .with_state(db_pool)
 }
 

@@ -9,6 +9,14 @@ use sqlx::PgPool;
 use crate::user::user_entity::UpdateUserRequest;
 use crate::user::user_entity::User;
 
+pub async fn hello(
+) -> Result<(StatusCode, Json<Value>), (StatusCode, Json<Value>)> {
+    Ok((
+        StatusCode::OK,
+        Json(json!({"success": true, "message": "Hello, World! backend James is the coolest."})),
+    ))
+}
+
 pub async fn get_all_users(
     State(db_pool): State<PgPool>,
 ) -> Result<(StatusCode, Json<Value>), (StatusCode, Json<Value>)> {
