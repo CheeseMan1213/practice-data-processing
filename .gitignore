@@ -14,7 +14,11 @@ Cargo.lock
 # JetBrains IDEs
 .idea/
 
+# dotenvy
 .env
 
 # MacOS
 .DS_Store
+
+# Terraform
+.terraform/

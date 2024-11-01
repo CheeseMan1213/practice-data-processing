@@ -23,8 +23,7 @@ enum Route {
   NotFound,
 }
 
-async fn switch(route: Route) -> Html {
-  
+fn switch(route: Route) -> Html {
   match route {
     Route::Login => html! { <pages::login::Login /> },
     Route::NotFound => html! { <pages::not_found::NotFound /> },
@@ -52,12 +51,12 @@ fn app() -> Html {
   }
 
   html! {
-    <p>{ (*message).clone() }</p>
-    // <BrowserRouter>
-    //   <contexts::CurrentUserProvider>
-    //     <Switch<Route> render={switch}/>
-    //   </contexts::CurrentUserProvider>
-    // </BrowserRouter>
+    // <p>{ (*message).clone() }</p>
+    <BrowserRouter>
+      <contexts::CurrentUserProvider>
+        <Switch<Route> render={switch}/>
+      </contexts::CurrentUserProvider>
+    </BrowserRouter>
   }
 }
 

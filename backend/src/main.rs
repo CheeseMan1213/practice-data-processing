@@ -1,6 +1,8 @@
 mod quadratic_formula;
 mod math;
 mod user;
+
+use std::env;
 use axum::http::Method;
 use user::user_repository::get_all_users;
 use user::user_repository::get_user_by_email;
@@ -16,16 +18,29 @@ use tokio::net::TcpListener;
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 use tower_http::cors::{CorsLayer, Any};
 
-// pub static PORT: &'static str = "3002";
+#[cfg(debug_assertions)]
+fn load_env() {
+    dotenvy::dotenv().expect("Failed to load .env file.");
+}
+
+#[cfg(not(debug_assertions))]
+fn load_env() {
+    // No-op for production/container environment.
+    // Get values straight from environment variables.
+    let _ = std::env::var("SERVER_PORT").expect("SERVER_PORT is not set in envionment variables.");
+    let _ = std::env::var("SERVER_ADDRESS").expect("SERVER_ADDRESS is not set in envionment variables.");
+    let _ = std::env::var("DATABASE_URL").expect("DATABASE_URL is not set in envionment variables.");
+    
+}
 
 #[tokio::main]
 async fn main() {
     println!("Hello, world from backend.");
-    dotenvy::dotenv().expect("Failed to load .env file.");
+    load_env();
 
-    let server_port = std::env::var("SERVER_PORT").expect("SERVER_PORT is not set in .env file.");
-    let server_address = std::env::var("SERVER_ADDRESS").expect("SERVER_ADDRESS is not set in .env file.");
-    let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL is not set in .env file.");
+    let server_port = env::var("SERVER_PORT").expect("SERVER_PORT is not set in envionment variables or .env file.");
+    let server_address = env::var("SERVER_ADDRESS").expect("SERVER_ADDRESS is not set in envionment variables or .env file.");
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL is not set in envionment variables or .env file.");
 
     let db_pool = PgPoolOptions::new()
     .max_connections(16)
@@ -41,14 +56,11 @@ async fn main() {
     
     println!("{}", multiply(2, 3));
 
-    // let app = Router::new().route("/", get(|| async { "Hello, World! backend James is the coolest." }));
-
-    // let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     // http://127.0.0.1:3002
     let listener = TcpListener::bind(format!("{}:{}", server_address, server_port))
     .await
     .expect("Failed to create TCP listener.");
-    // axum::serve(listener, app).await.unwrap();
+    
     axum::serve(listener, create_router(db_pool)).await.unwrap();
 }
 

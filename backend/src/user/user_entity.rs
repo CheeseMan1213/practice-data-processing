@@ -9,6 +9,7 @@ pub struct User {
   pub password: String,
 }
 
+// This is a different struct that I needed for some reasonto get the update user crud operation to worlk
 #[derive(Deserialize)]
 pub struct UpdateUserRequest {
   pub email: String,

@@ -1,4 +1,11 @@
 services:
+  backend:
+   image: pdp_backend_docker_image:latest
+   ports:
+     - "3002:3002"
+   depends_on:
+     - postgres
+
   postgres:
     image: postgres:latest
     volumes:
