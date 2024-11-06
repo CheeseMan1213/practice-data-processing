@@ -1,6 +1,16 @@
+trunk-version = "0.21.0"
+
 [build]
 target = "index.html"
 release = false
+dist = "dist"
 
 [serve]
 port = 8082
+
+[clean]
+cargo = false
+
+[tools]
+wasm_bindgen = "0.2.95"
+wasm_opt = "version_116"

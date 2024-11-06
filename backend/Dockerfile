@@ -32,7 +32,6 @@ ENV SQLX_OFFLINE=true
 RUN rm src/main.rs
 COPY .sqlx .sqlx
 COPY src src
-# COPY . .
 
 # Build the real application.
 RUN cargo build --release
@@ -41,6 +40,7 @@ RUN cargo build --release
 # Create a new stage for running the application using a slim version of the bullseye image.
 FROM debian:bullseye-slim AS final
 
+# Install essential build dependencies
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     libssl1.1 \

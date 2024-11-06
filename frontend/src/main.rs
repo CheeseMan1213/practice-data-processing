@@ -51,12 +51,12 @@ fn app() -> Html {
   }
 
   html! {
-    // <p>{ (*message).clone() }</p>
-    <BrowserRouter>
-      <contexts::CurrentUserProvider>
-        <Switch<Route> render={switch}/>
-      </contexts::CurrentUserProvider>
-    </BrowserRouter>
+    <p>{ (*message).clone() }</p>
+    // <BrowserRouter>
+    //   <contexts::CurrentUserProvider>
+    //     <Switch<Route> render={switch}/>
+    //   </contexts::CurrentUserProvider>
+    // </BrowserRouter>
   }
 }
 
