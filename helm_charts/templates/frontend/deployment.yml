@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "frontend.fullname" . }}
+  labels:
+    app: {{ include "frontend.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+    replicas: {{ .Values.frontend.replicaCount }}
+    selector:
+        matchLabels:
+        app: {{ include "frontend.name" . }}
+    template:
+        metadata:
+        labels:
+            app: {{ include "frontend.name" . }}
+        spec:
+        containers:
+            - name: {{ .Chart.Name }}
+            image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+            imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
+            ports:
+                - containerPort: 8082
+            env:
+                - name: BACKEND_URL
+                value: http://{{ include "backend.fullname" . }}:{{ .Values.backend.service.port }}

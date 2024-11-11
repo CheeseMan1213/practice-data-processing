@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm_charts.fullname" . }}-database
+  labels:
+    app: {{ include "helm_charts.name" . }}
+    chart: {{ include "helm_charts.chart" . }}
+spec:  
+  replicas: {{ .Values.database.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "helm_charts.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "helm_charts.name" . }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.database.image.repository }}:{{ .Values.database.image.tag }}"
+          imagePullPolicy: {{ .Values.database.image.pullPolicy }}
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              value: keyoarbcat
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-storage
+          emptyDir: {}
