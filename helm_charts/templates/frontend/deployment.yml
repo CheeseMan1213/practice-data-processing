@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "frontend.fullname" . }}
+  name: {{ include "helm_charts.fullname" . }}
   labels:
-    app: {{ include "frontend.name" . }}
+    app: {{ include "helm_charts.name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
 spec:
-    replicas: {{ .Values.frontend.replicaCount }}
-    selector:
-        matchLabels:
-        app: {{ include "frontend.name" . }}
-    template:
-        metadata:
-        labels:
-            app: {{ include "frontend.name" . }}
-        spec:
-        containers:
-            - name: {{ .Chart.Name }}
-            image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
-            imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
-            ports:
-                - containerPort: 8082
-            env:
-                - name: BACKEND_URL
-                value: http://{{ include "backend.fullname" . }}:{{ .Values.backend.service.port }}
+  replicas: {{ .Values.frontend.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "helm_charts.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "helm_charts.name" . }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+          imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
+          ports:
+            - containerPort: 8082
+          env:
+            - name: BACKEND_URL
+              value: http://{{ include "helm_charts.fullname" . }}:{{ .Values.backend.service.port }}
