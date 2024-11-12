@@ -1,29 +1,32 @@
 backend:
+  replicaCount: 1
   image:
+    name: backend
     repository: cheeseman1213/backend
-    replicaCount: 1
     tag: latest
-    pullPolicy: always
+    pullPolicy: Always
   service:
     type: ClusterIP
     port: 3002
 
 frontend:
+  replicaCount: 1
   image:
+    name: frontend
     repository: cheeseman1213/frontend
-    replicaCount: 1
     tag: latest
-    pullPolicy: always
+    pullPolicy: Always
   service:
     type: ClusterIP
     port: 8082
 
 database:
+  replicaCount: 1
   image:
+    name: postgres
     repository: postgres
-    replicaCount: 1
     tag: latest
-    pullPolicy: always
+    pullPolicy: Always
   service:
     type: ClusterIP
     port: 5432

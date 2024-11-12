@@ -1,5 +1,5 @@
 apiVersion: v2
-name: helm_charts
+name: pdp-app
 description: A Helm chart for deploying a postrgesql database. Then my backend and frontend applications.
 
 # A chart can be either an 'application' or a 'library' chart.

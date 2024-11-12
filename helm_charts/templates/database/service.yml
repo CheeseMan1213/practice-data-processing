@@ -5,8 +5,6 @@ metadata:
   labels:
     app: {{ include "helm_charts.name" . }}
     chart: {{ include "helm_charts.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 spec:
   type: {{ .Values.database.service.type }}
   ports:
@@ -15,4 +13,3 @@ spec:
       protocol: TCP
   selector:
     app: {{ include "helm_charts.name" . }}
-    release: {{ .Release.Name }}
