@@ -1,3 +1,7 @@
+##NOTE: I like being able to run docker build without neeidng to be in different directories. So, I use the -f flag to specify the Dockerfile location.
+# and run my build from the root of the project. Example: docker build -f frontend/Dockerfile .
+# Therefore the paths in the Dockerfile are relative to the root of the project.
+
 # ################################################################################
 # # Create a stage for building the application.
 # ARG RUST_VERSION=1.81.0
@@ -91,14 +95,19 @@
 # CMD ["nginx", "-g", "daemon off;"]
 
 # ################################################################################
-# Trying without trunk build --release. Build locally and just copy the dist folder to nginx.
+##NOTE: Trying without trunk build --release. Build locally and just copy the dist folder to nginx.
+
+##NOTE: I like being able to run docker build without neeidng to be in different directories. So, I use the -f flag to specify the Dockerfile location.
+# and run my build from the root of the project. Example: docker build -f frontend/Dockerfile .
+# Therefore the paths in the Dockerfile are relative to the root of the project.
+
 # Use a lightweight base image
 FROM nginx:alpine
 
 # Copy the built frontend files to the container
-COPY dist /usr/share/nginx/html
+COPY frontend/dist /usr/share/nginx/html
 # COPY nginx.conf /etc/nginx/nginx.conf
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 8082
 EXPOSE 8082

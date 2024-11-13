@@ -1,3 +1,7 @@
+##NOTE: I like being able to run docker build without neeidng to be in different directories. So, I use the -f flag to specify the Dockerfile location.
+# and run my build from the root of the project. Example: docker build -f backend/Dockerfile .
+# Therefore the paths in the Dockerfile are relative to the root of the project.
+
 ################################################################################
 # Create a stage for building the application.
 ARG RUST_VERSION=1.82.0
@@ -16,8 +20,9 @@ RUN apt-get update && apt-get install -y \
 ARG APP_NAME
 WORKDIR /app
 
-# Copy the backend Cargo.toml.
-COPY Cargo.toml ./Cargo.toml
+# Copy the backend Cargo.toml and Cargo.lock.
+COPY backend/Cargo.toml Cargo.toml
+COPY Cargo.lock Cargo.lock
 
 # Create a dummy main.rs to build dependencies.
 RUN mkdir src && \
@@ -30,8 +35,8 @@ ENV SQLX_OFFLINE=true
 
 # Copy the source code into the container
 RUN rm src/main.rs
-COPY .sqlx .sqlx
-COPY src src
+COPY backend/.sqlx .sqlx
+COPY backend/src src
 
 # Build the real application.
 RUN cargo build --release
