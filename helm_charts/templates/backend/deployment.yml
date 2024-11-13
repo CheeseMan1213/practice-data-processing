@@ -9,7 +9,7 @@ spec:
   replicas: {{ .Values.backend.replicaCount }}
   selector:
     matchLabels:
-    app: {{ include "helm_charts.name" . }}
+      app: {{ include "helm_charts.name" . }}
   template:
     metadata:
       labels:
@@ -24,3 +24,11 @@ spec:
           env:
             - name: FRONTEND_URL
               value: http://{{ include "helm_charts.fullname" . }}:{{ .Values.frontend.service.port }}
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+

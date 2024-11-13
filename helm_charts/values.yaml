@@ -1,8 +1,8 @@
 backend:
   replicaCount: 1
   image:
-    name: pdp_backend_docker_image
-    repository: cheeseman1213/pdp_backend_docker_image
+    name: pdp-backend-docker-image
+    repository: cheeseman1213/pdp-backend-docker-image
     tag: latest
     pullPolicy: Always
   service:
@@ -12,8 +12,8 @@ backend:
 frontend:
   replicaCount: 1
   image:
-    name: pdp_frontend_docker_image
-    repository: cheeseman1213/pdp_frontend_docker_image
+    name: pdp-frontend-docker-image
+    repository: cheeseman1213/pdp-frontend-docker-image
     tag: latest
     pullPolicy: Always
   service:
