@@ -7,6 +7,7 @@ mod api;
 mod components;
 mod pages;
 mod contexts;
+mod config;
 
 #[derive(Routable, PartialEq, Clone)]
 enum Route {

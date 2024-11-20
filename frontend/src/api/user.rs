@@ -1,8 +1,8 @@
 use gloo_net::http::Request;
 use gloo_net::Error;
 use serde_json::json;
+use crate::config::config::{get_app_host, load_env};
 
-use super::APP_HOST;
 #[derive(PartialEq)]
 pub struct User {
   pub id: i32,
@@ -23,7 +23,9 @@ pub struct MeResponse {
 }
 
 pub async fn api_login(username: String, password: String) -> Result<LoginResponse, Error> {
-  let reponse = Request::post(&format!("{}/users", APP_HOST))
+  load_env();
+  let app_host = get_app_host();
+  let reponse = Request::post(&format!("{}/users", app_host))
     .json(&json!({
         "email": username,
         "password": password
@@ -35,7 +37,9 @@ pub async fn api_login(username: String, password: String) -> Result<LoginRespon
 }
 
 pub async fn api_me(token: &String) -> Result<MeResponse, Error> {
-  let reponse = Request::get(&format!("{}/me", APP_HOST))
+  load_env();
+  let app_host = get_app_host();
+  let reponse = Request::get(&format!("{}/me", app_host))
     .header("Authorization", &format!("Bearer {}", token))
     .send()
     .await?;
@@ -44,7 +48,9 @@ pub async fn api_me(token: &String) -> Result<MeResponse, Error> {
 }
 
 pub async fn api_hello() -> Result<String, Error> {
-  let response = Request::get(&format!("{}/hello", APP_HOST))
+  load_env();
+  let app_host = get_app_host();
+  let response = Request::get(&format!("{}/hello", app_host))
     .send()
     .await?;
 

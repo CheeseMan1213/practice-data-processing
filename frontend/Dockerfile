@@ -104,6 +104,8 @@
 # Use a lightweight base image
 FROM nginx:alpine
 
+ENV APP_HOST='http://127.0.0.1:3002'
+
 # Copy the built frontend files to the container
 COPY frontend/dist /usr/share/nginx/html
 # COPY nginx.conf /etc/nginx/nginx.conf

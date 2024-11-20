@@ -11,5 +11,6 @@ spec:
     - port: {{ .Values.database.service.port }}
       targetPort: 5432
       protocol: TCP
+      name: postgres
   selector:
     app: {{ include "helm_charts.name" . }}

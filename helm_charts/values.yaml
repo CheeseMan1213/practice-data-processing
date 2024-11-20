@@ -8,6 +8,9 @@ backend:
   service:
     type: ClusterIP
     port: 3002
+  ingress:
+    enabled: true
+    host: pdp-app-backend.local
 
 frontend:
   replicaCount: 1
@@ -19,6 +22,9 @@ frontend:
   service:
     type: ClusterIP
     port: 8082
+  ingress:
+    enabled: true
+    host: pdp-app-frontend.local
 
 database:
   replicaCount: 1

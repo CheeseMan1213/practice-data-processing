@@ -4,7 +4,7 @@ metadata:
   name: {{ include "helm_charts.fullname" . }}-frontend
   labels:
     app: {{ include "helm_charts.name" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
 spec:
   replicas: {{ .Values.frontend.replicaCount }}
   selector:
@@ -22,12 +22,12 @@ spec:
           ports:
             - containerPort: 8082
           env:
-            - name: BACKEND_URL
-              value: http://{{ include "helm_charts.fullname" . }}:{{ .Values.backend.service.port }}
+            - name: APP_HOST
+              value: http://{{ include "helm_charts.fullname" . }}-backend:{{ .Values.backend.service.port }}
           resources:
             limits:
+              memory: "1024Mi"
+              cpu: "1000m"
+            requests:
               memory: "512Mi"
               cpu: "500m"
-            requests:
-              memory: "256Mi"
-              cpu: "250m"

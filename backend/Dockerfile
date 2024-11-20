@@ -78,5 +78,8 @@ COPY --from=build /app/target/release/${APP_NAME} /usr/local/bin/${APP_NAME}
 RUN chown appuser:appuser /usr/local/bin/${APP_NAME}
 USER appuser
 
+# Expose port 3002
+EXPOSE 3002
+
 # Run the application.
 CMD ["sh", "-c", "/usr/local/bin/${APP_NAME}"]
