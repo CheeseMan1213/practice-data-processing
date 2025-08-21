@@ -1,4 +1,4 @@
-use api::user::api_hello;
+// use api::user::api_hello;
 use yew::prelude::*;
 use yew_router::prelude::*;
 
@@ -13,6 +13,8 @@ mod config;
 enum Route {
   #[at("/")]
   Home,
+  #[at("/hello")]
+  Hello,
   #[at("/rustaceans")]
   Rustaceans,
   #[at("/crates")]
@@ -29,35 +31,36 @@ fn switch(route: Route) -> Html {
     Route::Login => html! { <pages::login::Login /> },
     Route::NotFound => html! { <pages::not_found::NotFound /> },
     Route::Home => html! { <pages::home::Home /> },
+    Route::Hello => html! { <pages::hello::Hello /> },
     _ => html! { <pages::login::Login /> },
   }
 }
 
 #[function_component(App)]
 fn app() -> Html {
-  let message = use_state(|| "Loading...".to_string());
+  // let message = use_state(|| "Loading...".to_string());
 
-  {
-    let message = message.clone();
-    use_effect_with((), move |_| {
-      wasm_bindgen_futures::spawn_local(async move {
-        let msg = match api_hello().await {
-          Ok(msg) => msg,
-          Err(_) => "Error fetching message".to_string(),
-        };
-        message.set(msg);
-      });
-      || ()
-    });
-  }
+  // {
+  //   let message = message.clone();
+  //   use_effect_with((), move |_| {
+  //     wasm_bindgen_futures::spawn_local(async move {
+  //       let msg = match api_hello().await {
+  //         Ok(msg) => msg,
+  //         Err(_) => "Error fetching message".to_string(),
+  //       };
+  //       message.set(msg);
+  //     });
+  //     || ()
+  //   });
+  // }
 
   html! {
-    <p>{ (*message).clone() }</p>
-    // <BrowserRouter>
-    //   <contexts::CurrentUserProvider>
-    //     <Switch<Route> render={switch}/>
-    //   </contexts::CurrentUserProvider>
-    // </BrowserRouter>
+    // <p>{ (*message).clone() }</p>
+    <BrowserRouter>
+      <contexts::CurrentUserProvider>
+        <Switch<Route> render={switch}/>
+      </contexts::CurrentUserProvider>
+    </BrowserRouter>
   }
 }
 

@@ -3,6 +3,10 @@ mod math;
 mod user;
 
 use std::env;
+use std::time::Duration;
+use axum::http::header::ACCEPT;
+use axum::http::header::AUTHORIZATION;
+use axum::http::header::CONTENT_TYPE;
 use axum::http::Method;
 use user::user_repository::get_all_users;
 use user::user_repository::get_user_by_email;
@@ -17,6 +21,7 @@ use axum::{routing::get, Router};
 use tokio::net::TcpListener;
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 use tower_http::cors::{CorsLayer, Any};
+// use tower_http::set_response_header::SetResponseHeaderLayer;
 
 #[cfg(debug_assertions)]
 fn load_env() {
@@ -73,8 +78,29 @@ pub fn create_router(db_pool: Pool<Postgres>) -> Router {
     // Create a CORS layer
     let cors = CorsLayer::new()
     .allow_origin(Any) // Allow any origin
-    .allow_methods([Method::GET, Method::POST, Method::PUT, Method::DELETE]) // Allow specific methods
+    // .allow_methods([Method::GET, Method::POST, Method::PUT, Method::DELETE]) // Allow specific HTTP methods
+    .allow_methods(Any)// Allow specific HTTP methods
     .allow_headers(Any); // Allow any headers
+
+    // let cors = CorsLayer::new()
+    // // .allow_origin(["http://pdp-app-frontend:8082".parse().unwrap()]) // Replace with your frontend URL
+    // .allow_origin(Any)
+    // .allow_methods([
+    //     Method::GET,
+    //     Method::POST,
+    //     Method::PUT,
+    //     Method::DELETE,
+    //     Method::OPTIONS,
+    // ])
+    // .allow_headers([
+    //     AUTHORIZATION,
+    //     ACCEPT,
+    //     CONTENT_TYPE,
+    // ])
+    // .allow_credentials(false)
+    // .max_age(Duration::from_secs(3600));
+
+    // SetResponseHeaderLayer::new("Access-Control-Allow-Origin", "*");
 
     Router::new()
         .route("/", get(hello_world))

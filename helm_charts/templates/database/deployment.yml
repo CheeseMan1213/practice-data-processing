@@ -10,10 +10,12 @@ spec:
   selector:
     matchLabels:
       app: {{ include "helm_charts.name" . }}
+      component: database
   template:
     metadata:
       labels:
         app: {{ include "helm_charts.name" . }}
+        component: database
     spec:
       containers:
         - name: {{ .Chart.Name }}-{{ .Values.database.image.name }}

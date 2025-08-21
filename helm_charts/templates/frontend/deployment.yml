@@ -10,10 +10,12 @@ spec:
   selector:
     matchLabels:
       app: {{ include "helm_charts.name" . }}
+      component: frontend
   template:
     metadata:
       labels:
         app: {{ include "helm_charts.name" . }}
+        component: frontend
     spec:
       containers:
         - name: {{ .Chart.Name }}-{{ .Values.frontend.image.name }}

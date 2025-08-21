@@ -16,6 +16,7 @@ serde_json = "1.0.128"
 dotenvy = "0.15.7"
 
 gloo-net = "0.6.0"
+gloo = "0.11.0"
 web-sys = { version = "0.3.72", features = ["HtmlInputElement"] }
 
 # I may not need this/these in the futues, but I do for now.

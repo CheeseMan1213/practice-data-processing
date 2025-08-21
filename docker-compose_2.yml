@@ -1,6 +1,8 @@
 services:
   postgres:
     image: postgres:latest
+    container_name: pdp-app-database
+    pull_policy: always
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./backend/database_init:/docker-entrypoint-initdb.d
@@ -10,18 +12,24 @@ services:
       - "5432:5432"
 
   backend:
-   image: pdp_backend_docker_image:latest
-   depends_on:
-     - postgres
-   ports:
-     - "3002:3002"
+    image: cheeseman1213/pdp-backend-docker-image:latest
+    container_name: pdp-app-backend
+    pull_policy: always
+    depends_on:
+      - postgres
+    ports:
+      - "3002:3002"
 
   frontend:
-   image: pdp_frontend_docker_image:latest
-   depends_on:
-     - backend
-   ports:
-     - "8082:8082"
+    image: cheeseman1213/pdp-frontend-docker-image:latest
+    container_name: pdp-app-frontend
+    pull_policy: always
+    depends_on:
+      - backend
+    ports:
+      - "8082:8082"
+    environment:
+      APP_HOST: http://pdp-app-backend:3002
 
 volumes:
   db-data:

@@ -25,3 +25,5 @@ Cargo.lock
 
 # Package helm charts
 *.tgz
+
+rendered.yml

@@ -4,6 +4,7 @@ metadata:
   name: {{ include "helm_charts.fullname" . }}-frontend
   labels:
     app: {{ include "helm_charts.name" . }}
+    component: frontend
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
 spec:
   type: {{ .Values.frontend.service.type }}
@@ -14,3 +15,4 @@ spec:
       name: http
   selector:
     app: {{ include "helm_charts.name" . }}
+    component: frontend

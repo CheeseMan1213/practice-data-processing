@@ -6,7 +6,7 @@ backend:
     tag: latest
     pullPolicy: Always
   service:
-    type: ClusterIP
+    type: LoadBalancer
     port: 3002
   ingress:
     enabled: true
@@ -20,7 +20,7 @@ frontend:
     tag: latest
     pullPolicy: Always
   service:
-    type: ClusterIP
+    type: LoadBalancer
     port: 8082
   ingress:
     enabled: true

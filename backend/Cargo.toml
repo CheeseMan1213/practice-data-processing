@@ -6,8 +6,8 @@ edition = "2021"
 [dependencies]
 
 #server
-axum = { version = "0.7.7", features = ["macros"] }
-tokio = { version = "1.40.0", features = ["macros", "rt-multi-thread"] }
+axum = "0.7.7"
+tokio = { version = "1.40.0", features = ["full"] }
 
 #sql
 sqlx = { version = "0.8.2", features = ["runtime-tokio-native-tls", "postgres", "macros"], default-features = false }
@@ -19,4 +19,5 @@ serde_json = "1.0.128"
 #env
 dotenvy = "0.15.7"
 
-tower-http = {version = "0.6.1", features = ["cors"]}
+tower = "0.5.1"
+tower-http = { version = "0.6.1", features = ["cors"] }

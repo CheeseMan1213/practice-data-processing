@@ -1,7 +1,7 @@
 use gloo_net::http::Request;
 use gloo_net::Error;
 use serde_json::json;
-use crate::config::config::{get_app_host, load_env};
+// use crate::config::config::{get_app_host, load_env};
 
 #[derive(PartialEq)]
 pub struct User {
@@ -23,8 +23,10 @@ pub struct MeResponse {
 }
 
 pub async fn api_login(username: String, password: String) -> Result<LoginResponse, Error> {
-  load_env();
-  let app_host = get_app_host();
+  // load_env();
+  // let app_host = get_app_host();
+  // let app_host = "http://127.0.0.1:3002";
+  let app_host = "http://pdp-app-backend:3002";
   let reponse = Request::post(&format!("{}/users", app_host))
     .json(&json!({
         "email": username,
@@ -37,8 +39,10 @@ pub async fn api_login(username: String, password: String) -> Result<LoginRespon
 }
 
 pub async fn api_me(token: &String) -> Result<MeResponse, Error> {
-  load_env();
-  let app_host = get_app_host();
+  // load_env();
+  // let app_host = get_app_host();
+  // let app_host = "http://127.0.0.1:3002";
+  let app_host = "http://pdp-app-backend:3002";
   let reponse = Request::get(&format!("{}/me", app_host))
     .header("Authorization", &format!("Bearer {}", token))
     .send()
@@ -48,8 +52,10 @@ pub async fn api_me(token: &String) -> Result<MeResponse, Error> {
 }
 
 pub async fn api_hello() -> Result<String, Error> {
-  load_env();
-  let app_host = get_app_host();
+  // load_env();
+  // let app_host = get_app_host();
+  // let app_host = "http://127.0.0.1:3002";
+  let app_host = "http://pdp-app-backend:3002";
   let response = Request::get(&format!("{}/hello", app_host))
     .send()
     .await?;

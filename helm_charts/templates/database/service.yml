@@ -4,6 +4,7 @@ metadata:
   name: {{ include "helm_charts.fullname" . }}-database
   labels:
     app: {{ include "helm_charts.name" . }}
+    component: database
     chart: {{ include "helm_charts.chart" . }}
 spec:
   type: {{ .Values.database.service.type }}
@@ -14,3 +15,4 @@ spec:
       name: postgres
   selector:
     app: {{ include "helm_charts.name" . }}
+    component: database

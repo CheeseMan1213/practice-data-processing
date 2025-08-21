@@ -47,6 +47,7 @@ FROM debian:bullseye-slim AS final
 
 # Install essential build dependencies
 RUN apt-get update && apt-get install -y \
+    iputils-ping \ 
     ca-certificates \
     libssl1.1 \
     && rm -rf /var/lib/apt/lists/*
