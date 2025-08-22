@@ -77,10 +77,10 @@ pub fn create_router(db_pool: Pool<Postgres>) -> Router {
 
     // Create a CORS layer
     let cors = CorsLayer::new()
-    .allow_origin(Any) // Allow any origin
-    // .allow_methods([Method::GET, Method::POST, Method::PUT, Method::DELETE]) // Allow specific HTTP methods
-    .allow_methods(Any)// Allow specific HTTP methods
-    .allow_headers(Any); // Allow any headers
+        .allow_origin(Any) // Allow any origin
+        .allow_methods([Method::GET, Method::POST, Method::PUT, Method::DELETE, Method::OPTIONS]) // Include OPTIONS for preflight
+        .allow_headers(Any) // Allow any headers
+        .allow_credentials(false);
 
     // let cors = CorsLayer::new()
     // // .allow_origin(["http://pdp-app-frontend:8082".parse().unwrap()]) // Replace with your frontend URL

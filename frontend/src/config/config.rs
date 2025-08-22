@@ -1,21 +1,18 @@
-use wasm_bindgen::JsCast;
-use js_sys::Object;
-use web_sys::{js_sys, wasm_bindgen};
-// use std::env;
+use web_sys::window;
 
-// pub fn load_env() {
-//     dotenvy::dotenv().expect("Failed to load .env file.");
-// }
-
-// pub fn get_app_host() -> String {
-//     env::var("APP_HOST").expect("APP_HOST must be set")
-// }
-
-// pub fn get_app_host() -> String {
-//     let config = gloo::utils::window().get("__APP_CONFIG__");
-//     config.expect("APP_CONFIG not found").unchecked_into::<Object>()
-//         .get("APP_HOST")
-//         .as_string()
-//         .expect("APP_HOST not set")
-// }
+pub fn get_api_host() -> String {
+    // Try to get API host from environment variable via window object
+    // This can be set during build time or via JavaScript
+    if let Some(window) = window() {
+        if let Ok(host) = window.location().hostname() {
+            // If running on localhost, use localhost backend
+            if host == "localhost" || host == "127.0.0.1" {
+                return "http://localhost:3002".to_string();
+            }
+        }
+    }
+    
+    // Default to Kubernetes service name for deployed environments
+    "http://pdp-app-backend:3002".to_string()
+}
 
