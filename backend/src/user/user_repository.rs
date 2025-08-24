@@ -20,7 +20,7 @@ pub async fn hello(
 pub async fn get_all_users(
     State(db_pool): State<PgPool>,
 ) -> Result<(StatusCode, Json<Value>), (StatusCode, Json<Value>)> {
-    let rows = sqlx::query_as!(User, "SELECT * FROM users ORDER BY email")
+    let rows = sqlx::query_as::<_, User>("SELECT * FROM users ORDER BY email")
         .fetch_all(&db_pool)
         .await
         .map_err(|e| {
@@ -40,7 +40,8 @@ pub async fn get_user_by_email(
   State(db_pool): State<PgPool>,
   Path(email): Path<String>,
 ) -> Result<(StatusCode, Json<Value>), (StatusCode, Json<Value>)> {
-  let row = sqlx::query_as!(User, "SELECT * FROM users WHERE email = $1", email)
+  let row = sqlx::query_as::<_, User>("SELECT * FROM users WHERE email = $1")
+    .bind(email)
     .fetch_one(&db_pool)
     .await
     .map_err(|e| {
@@ -60,12 +61,11 @@ pub async fn create_user(
     State(db_pool): State<PgPool>,
     Json(user): Json<User>,
   ) -> Result<(StatusCode, Json<Value>), (StatusCode, Json<Value>)> {
-    let row = sqlx::query_as!(
-        User,
-      "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING email, password",
-      user.email,
-      user.password
+    let row = sqlx::query_as::<_, User>(
+      "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING email, password"
     )
+    .bind(user.email)
+    .bind(user.password)
     .fetch_one(&db_pool)
     .await
     .map_err(|e| {
@@ -85,11 +85,11 @@ pub async fn update_user(
   State(db_pool): State<PgPool>,
   Json(update_user_request): Json<UpdateUserRequest>,
 ) -> Result<(StatusCode, Json<Value>), (StatusCode, Json<Value>)> {
-  sqlx::query!(
-    "UPDATE users SET password = $2 WHERE email = $1",
-    update_user_request.email,
-    update_user_request.password
+  sqlx::query(
+    "UPDATE users SET password = $2 WHERE email = $1"
   )
+  .bind(update_user_request.email)
+  .bind(update_user_request.password)
   .execute(&db_pool)
   .await
   .map_err(|e| {
@@ -108,7 +108,8 @@ pub async fn delete_user(
   State(db_pool): State<PgPool>,
   Json(user): Json<User>,
 ) -> Result<(StatusCode, Json<Value>), (StatusCode, Json<Value>)> {
-  sqlx::query!("DELETE FROM users WHERE email = $1", user.email,)
+  sqlx::query("DELETE FROM users WHERE email = $1")
+    .bind(user.email)
     .execute(&db_pool)
     .await
     .map_err(|e| {

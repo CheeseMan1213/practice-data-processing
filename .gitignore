@@ -27,3 +27,5 @@ Cargo.lock
 *.tgz
 
 rendered.yml
+
+.claude/
