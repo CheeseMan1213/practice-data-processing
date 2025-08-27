@@ -3,10 +3,6 @@ mod math;
 mod user;
 
 use std::env;
-use std::time::Duration;
-use axum::http::header::ACCEPT;
-use axum::http::header::AUTHORIZATION;
-use axum::http::header::CONTENT_TYPE;
 use axum::http::Method;
 use user::user_repository::get_all_users;
 use user::user_repository::get_user_by_email;
@@ -106,7 +102,7 @@ pub fn create_router(db_pool: Pool<Postgres>) -> Router {
         .route("/", get(hello_world))
         .route("/hello", get(hello))
         .route("/users", get(get_all_users).post(create_user))
-        .route("/users/:email", get(get_user_by_email).put(update_user).delete(delete_user))
+        .route("/users/{email}", get(get_user_by_email).put(update_user).delete(delete_user))
         .layer(cors)
         .with_state(db_pool)
 }
