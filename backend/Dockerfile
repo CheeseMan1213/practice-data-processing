@@ -1,9 +1,4 @@
-##NOTE: I like being able to run docker build without neeidng to be in different directories. So, I use the -f flag to specify the Dockerfile location.
-# and run my build from the root of the project. Example: docker build -f backend/Dockerfile .
-# Therefore the paths in the Dockerfile are relative to the root of the project.
-
-################################################################################
-# Create a stage for building the application.
+# Create a multi stage for building the application.
 ARG RUST_VERSION=1.89.0
 ARG APP_NAME=backend
 
@@ -44,6 +39,15 @@ RUN cargo build --release
 ################################################################################
 # Create a new stage for running the application using a slim version of the bullseye image.
 FROM debian:bullseye-slim AS final
+
+# Add metadata labels following OCI image spec and Docker best practices  
+LABEL org.opencontainers.image.title="Backend API Server"
+LABEL org.opencontainers.image.description="Rust Axum backend server for practice data processing"
+LABEL org.opencontainers.image.vendor="Your Organization"
+LABEL org.opencontainers.image.version="develop"
+LABEL org.opencontainers.image.source="https://github.com/your-org/practice-data-processing"
+LABEL org.opencontainers.image.revision="develop"
+LABEL org.opencontainers.image.created="2025-01-01T00:00:00Z"
 
 # Install essential build dependencies
 RUN apt-get update && apt-get install -y \

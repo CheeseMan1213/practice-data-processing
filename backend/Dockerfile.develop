@@ -1,0 +1,80 @@
+##NOTE: I like being able to run docker build without neeidng to be in different directories. So, I use the -f flag to specify the Dockerfile location.
+# and run my build from the root of the project. Example: docker build -f backend/Dockerfile.develop .
+# Therefore the paths in the Dockerfile are relative to the root of the project.
+
+################################################################################
+# Create a stage for building the application.
+ARG RUST_VERSION=1.89.0
+ARG APP_NAME=backend
+
+# Use the official Rust image with slim Debian for building
+FROM rust:${RUST_VERSION}-slim-bullseye AS build
+
+# Install essential build dependencies
+RUN apt-get update && apt-get install -y \
+    pkg-config \
+    libssl-dev \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+ARG APP_NAME
+WORKDIR /app
+
+# Copy workspace Cargo.toml and Cargo.lock first for better layer caching
+COPY Cargo.lock backend/Cargo.toml backend/
+
+# Create dummy projects to build dependencies for both workspace members
+RUN mkdir backend/src && \
+    echo "fn main() {}" > backend/src/main.rs && \
+    cargo build --release --manifest-path backend/Cargo.toml
+
+# Set environment variable for SQLx so we can build offline
+ENV SQLX_OFFLINE=true
+
+# Copy the actual source code
+COPY backend/.sqlx backend/.sqlx
+COPY backend/src backend/src
+
+# Build the real application and strip the binary for smaller size
+RUN cargo build --release --manifest-path backend/Cargo.toml && \
+    strip backend/target/release/${APP_NAME}
+
+################################################################################
+# Create a new stage for running the application using Google's distroless image
+FROM gcr.io/distroless/cc-debian12:latest AS final
+
+# Add metadata labels following OCI image spec and Docker best practices  
+LABEL org.opencontainers.image.title="Backend API Server"
+LABEL org.opencontainers.image.description="Rust Axum backend server for practice data processing"
+LABEL org.opencontainers.image.vendor="Your Organization"
+LABEL org.opencontainers.image.version="develop"
+LABEL org.opencontainers.image.source="https://github.com/your-org/practice-data-processing"
+LABEL org.opencontainers.image.revision="develop"
+LABEL org.opencontainers.image.created="2025-01-01T00:00:00Z"
+
+ARG APP_NAME
+
+# Environment variables for runtime configuration
+ENV SERVER_PORT=3002
+ENV SERVER_ADDRESS=0.0.0.0
+ENV RUST_LOG=info
+ENV RUST_BACKTRACE=1
+
+# Copy the stripped binary from the build stage
+COPY --from=build /app/backend/target/release/${APP_NAME} /usr/local/bin/app
+
+# Distroless images run as non-root by default (user nonroot:nonroot, uid:gid 65532:65532)
+# No need to create a user as distroless already provides one
+
+# Expose the application port
+EXPOSE 3002
+
+# Add healthcheck to monitor application health via HTTP endpoint
+# Note: For distroless images, healthcheck should be handled externally (Docker Compose, K8s, etc.)
+# Uncomment the line below if you have a health check endpoint and an external tool to call it
+# HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+#     CMD ["/path/to/health/checker", "http://localhost:3002"]
+
+# Use ENTRYPOINT instead of CMD for better signal handling and direct execution
+# This ensures the application receives signals directly without shell interpretation
+ENTRYPOINT ["/usr/local/bin/app"]
