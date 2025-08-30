@@ -4,7 +4,7 @@
 
 ################################################################################
 # Create a stage for building the application.
-ARG RUST_VERSION=1.82.0
+ARG RUST_VERSION=1.89.0
 ARG APP_NAME=backend
 
 # Set the base image for the build stage using the slim version of the bullseye image.

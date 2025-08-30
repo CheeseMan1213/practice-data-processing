@@ -102,6 +102,6 @@ The backend exposes:
 
 ## Development Notes
 
-- Uses trunk-version 0.21.0 for frontend builds
+- Uses trunk-version 0.21.14 for frontend builds
 - CORS is configured permissively for development
 - Database password is `keyoarbcat` for development environment
